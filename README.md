@@ -29,7 +29,7 @@ React Native Chart Kit (gráficos)
 
 ⚙️ Configuração
 1. Backend
-bash
+
 cd backend
 npm install
 Banco de Dados
@@ -37,25 +37,26 @@ Crie um banco MySQL chamado tcc_esp32
 
 Configure as credenciais no .env:
 
-env
+
 DB_HOST=localhost
 DB_USER=root
 DB_PASSWORD=
 DB_NAME=tcc_esp32
 JWT_SECRET=sua_chave_secreta_aqui
+
 Iniciar
-bash
 node server.js
+
 2. Mobile (React Native)
-bash
+
 cd mobile
 npm install
 Configuração
 Altere API_URL no arquivo src/services/api.ts para seu IP local
 
 Executar
-bash
 npx react-native run-android  # ou run-ios
+
 3. ESP32 (Opcional)
 Carregue o sketch esp32_ble_json.ino (na pasta /esp32)
 
@@ -67,4 +68,5 @@ O dispositivo aparecerá como ESP32_Sensor via Bluetooth
 ✅ Armazenamento em banco de dados
 ✅ Gráficos em tempo real
 ✅ Simulador de dados (para desenvolvimento)
+
 
