@@ -2,18 +2,29 @@ import React, { useState } from 'react';
 import { View, Text, TextInput, TouchableOpacity, Alert, StyleSheet, Image } from 'react-native';
 import api from '../api';
 
-const LoginScreen = ({ navigation }) => {
+const RegisterScreen = ({ navigation }) => {
+    const [username, setUsername] = useState(''); // O backend espera 'username'
     const [email, setEmail] = useState('');
     const [password, setPassword] = useState('');
+    const [confirmPassword, setConfirmPassword] = useState('');
 
-    const handleLogin = async () => {
+    const handleRegister = async () => {
+        if (password !== confirmPassword) {
+            Alert.alert('Erro', 'As senhas não coincidem.');
+            return;
+        }
+
         try {
-            const response = await api.post('/api/auth/login', { email, password });
+            // O backend espera 'username' e 'password'
+            const response = await api.post('/api/auth/register', { username, password });
             const { token } = response.data;
 
+            // Após o registro, navega para a tela Home
+            Alert.alert('Sucesso', 'Conta criada com sucesso!');
             navigation.navigate('Home', { token });
+
         } catch (error) {
-            Alert.alert('Erro no Login', 'Email ou senha inválidos.');
+            Alert.alert('Erro no Cadastro', 'Não foi possível criar a conta. Tente outro nome de usuário.');
             console.error(error);
         }
     };
@@ -21,12 +32,19 @@ const LoginScreen = ({ navigation }) => {
     return (
         <View style={styles.container}>
             <Image source={require('../../assets/icon.png')} style={styles.logo} />
-            <Text style={styles.title}>Entre com sua conta</Text>
-            <Text style={styles.subtitle}>Digite seu e-mail e senha para efetuar login.</Text>
+            <Text style={styles.title}>Crie sua conta</Text>
+            <Text style={styles.subtitle}>Crie sua conta para continuar.</Text>
 
             <TextInput
                 style={styles.input}
-                placeholder="Email"
+                placeholder="Nome"
+                value={username}
+                onChangeText={setUsername}
+                autoCapitalize="words"
+            />
+            <TextInput
+                style={styles.input}
+                placeholder="E-mail"
                 value={email}
                 onChangeText={setEmail}
                 keyboardType="email-address"
@@ -39,23 +57,22 @@ const LoginScreen = ({ navigation }) => {
                 onChangeText={setPassword}
                 secureTextEntry
             />
+            <TextInput
+                style={styles.input}
+                placeholder="Confirmar Senha"
+                value={confirmPassword}
+                onChangeText={setConfirmPassword}
+                secureTextEntry
+            />
 
-            {/* Link "Esqueceu sua senha?" adicionado aqui */}
-            <TouchableOpacity
-                style={styles.forgotPasswordContainer}
-                onPress={() => {/* Navegar para tela de recuperação de senha */ }}
-            >
-                <Text style={styles.forgotPasswordText}>Esqueceu sua senha?</Text>
+            <TouchableOpacity style={styles.button} onPress={handleRegister}>
+                <Text style={styles.buttonText}>Criar conta</Text>
             </TouchableOpacity>
 
-            <TouchableOpacity style={styles.button} onPress={handleLogin}>
-                <Text style={styles.buttonText}>Entrar</Text>
-            </TouchableOpacity>
-
-            <View style={styles.signupContainer}>
-                <Text style={styles.signupText}>Não possui conta? </Text>
-                <TouchableOpacity onPress={() => navigation.navigate('Register')}>
-                    <Text style={[styles.signupText, styles.signupLink]}>Criar conta</Text>
+            <View style={styles.loginContainer}>
+                <Text style={styles.loginText}>Já possui conta? </Text>
+                <TouchableOpacity onPress={() => navigation.navigate('Login')}>
+                    <Text style={[styles.loginText, styles.loginLink]}>Entrar</Text>
                 </TouchableOpacity>
             </View>
         </View>
@@ -96,38 +113,30 @@ const styles = StyleSheet.create({
         paddingHorizontal: 15,
         fontSize: 16,
     },
-    // Estilos para o link "Esqueceu sua senha?"
-    forgotPasswordContainer: {
-        alignSelf: 'flex-end',
-        marginBottom: 20,
-    },
-    forgotPasswordText: {
-        color: '#28a745',
-        fontSize: 16,
-    },
     button: {
         backgroundColor: '#28a745',
         paddingVertical: 15,
         borderRadius: 8,
         alignItems: 'center',
+        marginTop: 10,
     },
     buttonText: {
         color: '#fff',
         fontSize: 18,
         fontWeight: 'bold',
     },
-    signupContainer: {
+    loginContainer: {
         flexDirection: 'row',
         justifyContent: 'center',
         marginTop: 20,
     },
-    signupText: {
+    loginText: {
         fontSize: 16,
     },
-    signupLink: {
+    loginLink: {
         color: '#28a745',
         fontWeight: 'bold',
     },
 });
 
-export default LoginScreen;
+export default RegisterScreen;
