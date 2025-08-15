@@ -8,7 +8,8 @@ const HomeScreen = ({ route, navigation }) => {
 
     const fetchSensorData = async () => {
         try {
-            const response = await api.get('/sensor/data', {
+            // Adicionado /api ao endpoint e corrigido o caminho
+            const response = await api.get('/api/sensor-data', {
                 headers: {
                     Authorization: `Bearer ${token}`,
                 },
@@ -33,10 +34,12 @@ const HomeScreen = ({ route, navigation }) => {
                 keyExtractor={(item) => item.id.toString()}
                 renderItem={({ item }) => (
                     <View style={{ padding: 10, borderBottomWidth: 1, borderBottomColor: '#ccc' }}>
-                        <Text>Temperatura: {item.temperature}°C</Text>
-                        <Text>Umidade: {item.humidity}%</Text>
-                        <Text>Umidade do Solo: {item.soilMoisture}</Text>
-                        <Text>Data: {new Date(item.createdAt).toLocaleString()}</Text>
+                        {/* Alterado para exibir os dados corretos do backend */}
+                        <Text>Velocidade: {item.velocidade}</Text>
+                        <Text>Temperatura: {item.temperatura}°C</Text>
+                        <Text>Tensão: {item.tensao}V</Text>
+                        <Text>Corrente: {item.corrente}A</Text>
+                        <Text>Data: {new Date(item.timestamp).toLocaleString()}</Text>
                     </View>
                 )}
             />

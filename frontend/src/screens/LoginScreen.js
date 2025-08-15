@@ -3,12 +3,13 @@ import { View, Text, TextInput, Button, Alert } from 'react-native';
 import api from '../api';
 
 const LoginScreen = ({ navigation }) => {
-    const [email, setEmail] = useState('');
+    const [username, setUsername] = useState(''); // Alterado de email para username
     const [password, setPassword] = useState('');
 
     const handleLogin = async () => {
         try {
-            const response = await api.post('/auth/login', { email, password });
+            // Adicionado /api ao endpoint
+            const response = await api.post('/api/auth/login', { username, password }); // Alterado de email para username
             const { token } = response.data;
 
             // Aqui você pode salvar o token para usar em outras requisições
@@ -16,7 +17,7 @@ const LoginScreen = ({ navigation }) => {
 
             navigation.navigate('Home', { token });
         } catch (error) {
-            Alert.alert('Erro no Login', 'Email ou senha inválidos.');
+            Alert.alert('Erro no Login', 'Usuário ou senha inválidos.');
             console.error(error);
         }
     };
@@ -26,10 +27,9 @@ const LoginScreen = ({ navigation }) => {
             <Text style={{ fontSize: 24, textAlign: 'center', marginBottom: 20 }}>Login</Text>
             <TextInput
                 style={{ height: 40, borderColor: 'gray', borderWidth: 1, marginBottom: 10, paddingHorizontal: 10 }}
-                placeholder="Email"
-                value={email}
-                onChangeText={setEmail}
-                keyboardType="email-address"
+                placeholder="Usuário" // Alterado de Email para Usuário
+                value={username}
+                onChangeText={setUsername} // Alterado de setEmail para setUsername
                 autoCapitalize="none"
             />
             <TextInput
