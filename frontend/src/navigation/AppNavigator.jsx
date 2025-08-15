@@ -3,10 +3,8 @@ import { NavigationContainer } from '@react-navigation/native';
 import { createStackNavigator } from '@react-navigation/stack';
 import HomeScreen from '../screens/HomeScreen';
 import DataScreen from '../screens/DataScreen';
-import { RootStackParamList } from '../screens/HomeScreen'; // 👈 Importe o tipo aqui
 
-// 1. Tipar o Stack Navigator com o 'RootStackParamList'
-const Stack = createStackNavigator<RootStackParamList>();
+const Stack = createStackNavigator();
 
 export default function AppNavigator() {
   return (
