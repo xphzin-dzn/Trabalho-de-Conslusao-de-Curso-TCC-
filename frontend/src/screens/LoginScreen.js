@@ -20,7 +20,7 @@ const LoginScreen = ({ navigation }) => {
 
     return (
         <View style={styles.container}>
-            <Image source={require('../assets/icon.png')} style={styles.logo} />
+            <Image source={require('../../assets/icon.png')} style={styles.logo} />
             <Text style={styles.title}>Entre com sua conta</Text>
             <Text style={styles.subtitle}>Digite seu e-mail e senha para efetuar login.</Text>
 
@@ -39,6 +39,14 @@ const LoginScreen = ({ navigation }) => {
                 onChangeText={setPassword}
                 secureTextEntry
             />
+
+            {/* Link "Esqueceu sua senha?" adicionado aqui */}
+            <TouchableOpacity
+                style={styles.forgotPasswordContainer}
+                onPress={() => {/* Navegar para tela de recuperação de senha */ }}
+            >
+                <Text style={styles.forgotPasswordText}>Esqueceu sua senha?</Text>
+            </TouchableOpacity>
 
             <TouchableOpacity style={styles.button} onPress={handleLogin}>
                 <Text style={styles.buttonText}>Entrar</Text>
@@ -86,6 +94,15 @@ const styles = StyleSheet.create({
         borderRadius: 8,
         marginBottom: 15,
         paddingHorizontal: 15,
+        fontSize: 16,
+    },
+    // Estilos para o link "Esqueceu sua senha?"
+    forgotPasswordContainer: {
+        alignSelf: 'flex-end',
+        marginBottom: 20,
+    },
+    forgotPasswordText: {
+        color: '#28a745',
         fontSize: 16,
     },
     button: {
