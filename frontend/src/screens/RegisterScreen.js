@@ -3,7 +3,7 @@ import { View, Text, TextInput, TouchableOpacity, Alert, StyleSheet, Image } fro
 import api from '../api';
 
 const RegisterScreen = ({ navigation }) => {
-    const [username, setUsername] = useState(''); // O backend espera 'username'
+    const [username, setUsername] = useState('');
     const [email, setEmail] = useState('');
     const [password, setPassword] = useState('');
     const [confirmPassword, setConfirmPassword] = useState('');
@@ -15,16 +15,14 @@ const RegisterScreen = ({ navigation }) => {
         }
 
         try {
-            // O backend espera 'username' e 'password'
-            const response = await api.post('/api/auth/register', { username, password });
+            const response = await api.post('/api/auth/register', { username, email, password });
             const { token } = response.data;
 
-            // Após o registro, navega para a tela Home
             Alert.alert('Sucesso', 'Conta criada com sucesso!');
             navigation.navigate('Home', { token });
 
         } catch (error) {
-            Alert.alert('Erro no Cadastro', 'Não foi possível criar a conta. Tente outro nome de usuário.');
+            Alert.alert('Erro no Cadastro', 'Não foi possível criar a conta. Tente outro nome de usuário ou e-mail.');
             console.error(error);
         }
     };
@@ -33,7 +31,7 @@ const RegisterScreen = ({ navigation }) => {
         <View style={styles.container}>
             <Image source={require('../../assets/icon.png')} style={styles.logo} />
             <Text style={styles.title}>Crie sua conta</Text>
-            <Text style={styles.subtitle}>Crie sua conta para continuar.</Text>
+            <Text style={styles.subtitle}>Crie sua conta, é grátis!</Text>
 
             <TextInput
                 style={styles.input}

@@ -40,7 +40,6 @@ const LoginScreen = ({ navigation }) => {
                 secureTextEntry
             />
 
-            {/* Link "Esqueceu sua senha?" adicionado aqui */}
             <TouchableOpacity
                 style={styles.forgotPasswordContainer}
                 onPress={() => {/* Navegar para tela de recuperação de senha */ }}
@@ -96,7 +95,6 @@ const styles = StyleSheet.create({
         paddingHorizontal: 15,
         fontSize: 16,
     },
-    // Estilos para o link "Esqueceu sua senha?"
     forgotPasswordContainer: {
         alignSelf: 'flex-end',
         marginBottom: 20,
