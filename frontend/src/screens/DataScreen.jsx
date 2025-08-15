@@ -1,10 +1,6 @@
 import React, { useState, useEffect } from 'react';
 import { View, Text, Dimensions, StyleSheet, ActivityIndicator, Alert } from 'react-native';
 import { LineChart } from 'react-native-chart-kit';
-import { StackScreenProps } from '@react-navigation/stack';
-import { RootStackParamList } from './HomeScreen';
-
-type DataScreenProps = StackScreenProps<RootStackParamList, 'Data'>;
 
 const screenWidth = Dimensions.get('window').width;
 
@@ -19,13 +15,13 @@ const chartConfig = {
         borderRadius: 16
     },
     propsForDots: {
-      r: "6",
-      strokeWidth: "2",
-      stroke: "#ffa726"
+        r: "6",
+        strokeWidth: "2",
+        stroke: "#ffa726"
     }
 };
 
-export default function DataScreen({ navigation }: DataScreenProps) {
+export default function DataScreen({ navigation }) {
     const [loading, setLoading] = useState(true);
     const [chartData, setChartData] = useState({
         labels: [],
@@ -35,7 +31,7 @@ export default function DataScreen({ navigation }: DataScreenProps) {
     // Função para buscar e processar os dados do backend
     const fetchSensorData = async () => {
         // SUBSTITUA '192.168.1.10' PELO IP DA SUA MÁQUINA
-        const serverIp = '192.168.1.10'; 
+        const serverIp = '192.168.1.10';
         const baseUrl = `http://${serverIp}:3000/api`;
 
         try {
@@ -45,7 +41,7 @@ export default function DataScreen({ navigation }: DataScreenProps) {
                 headers: { 'Content-Type': 'application/json' },
                 body: JSON.stringify({
                     // Substitua por credenciais válidas do seu banco de dados
-                    email: 'seu_email@exemplo.com', 
+                    email: 'seu_email@exemplo.com',
                     password: 'sua_senha_secreta',
                 }),
             });
@@ -55,11 +51,11 @@ export default function DataScreen({ navigation }: DataScreenProps) {
             }
 
             const { token } = await loginResponse.json();
-            
+
             if (!token) {
                 throw new Error('Token JWT não recebido.');
             }
-            
+
             // 2. BUSCAR DADOS: Usar o token para acessar a rota protegida
             const dataResponse = await fetch(`${baseUrl}/sensor-data`, {
                 method: 'GET',
@@ -93,7 +89,7 @@ export default function DataScreen({ navigation }: DataScreenProps) {
                     }
                 ]
             };
-            
+
             setChartData(formattedData);
 
         } catch (error) {
