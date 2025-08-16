@@ -38,7 +38,7 @@ const WelcomeScreen = ({ navigation }) => {
                         <Text style={styles.contateNosButtonText}>Contate-nos</Text>
                     </TouchableOpacity>
                 </View>
-                <Image source={require('../../assets/icon.png')} style={styles.heroImage} />
+                <Image source={require('../../assets/ifeco.png')} style={styles.heroImage} />
             </View>
 
             {/* Seção de Apoio */}
@@ -51,7 +51,7 @@ const WelcomeScreen = ({ navigation }) => {
                             <Text style={styles.apoioButtonText}>Get your free proposal</Text>
                         </TouchableOpacity>
                     </View>
-                    <Image source={require('../../assets/icon.png')} style={styles.apoioImage} />
+                    <Image source={require('../../assets/pay.png')} style={styles.apoioImage} />
                 </View>
             </View>
 
@@ -100,8 +100,8 @@ const styles = StyleSheet.create({
         width: '100%',
     },
     logo: {
-        width: 150,
-        height: 60,
+        width: 149,
+        height: 149,
         resizeMode: 'contain',
     },
     headerActions: {
