@@ -1,10 +1,10 @@
 import React, { useState } from 'react';
 import { View, Text, TouchableOpacity, StyleSheet, Image, ScrollView } from 'react-native';
 
-// Componente reutilizável para os itens do processo, agora com estado para controlar qual está aberto
+// --- COMPONENTES REUTILIZÁVEIS ---
+
 const ProcessoItem = ({ numero, titulo, conteudo, aberto, onPress }) => {
     return (
-        // O estilo muda se o item estiver aberto
         <View style={[styles.processoItem, aberto && styles.processoItemAberto]}>
             <TouchableOpacity onPress={onPress} style={styles.processoItemHeader}>
                 <Text style={[styles.processoItemNumber, aberto && styles.processoItemNumeroAberto]}>{numero}</Text>
@@ -20,13 +20,32 @@ const ProcessoItem = ({ numero, titulo, conteudo, aberto, onPress }) => {
     );
 };
 
+const EquipeCard = ({ imagem, nome, cargo, descricao }) => {
+    return (
+        <View style={styles.equipeCard}>
+            <View style={styles.equipeCardHeader}>
+                <Image source={imagem} style={styles.equipeAvatar} />
+                <View style={styles.equipeHeaderText}>
+                    <Text style={styles.equipeNome}>{nome}</Text>
+                    <Text style={styles.equipeCargo}>{cargo}</Text>
+                </View>
+                <TouchableOpacity>
+                    {/* Substitua 'icon.png' pelo seu ícone do LinkedIn */}
+                    <Image source={require('../../assets/icon.png')} style={styles.linkedinIcon} />
+                </TouchableOpacity>
+            </View>
+            <Text style={styles.equipeDescricao}>{descricao}</Text>
+        </View>
+    );
+};
+
 
 const WelcomeScreen = ({ navigation }) => {
-    const [itemAberto, setItemAberto] = useState('01'); // Controla qual item está aberto
-    const textoLoremIpsum = "Lorem Ipsum is simply dummy text of the printing and typesetting industry. Lorem Ipsum has been the industry's standard dummy text ever since the 1500s, when an unknown printer took a galley of type and scrambled it to make a type specimen book.";
+    const [itemAberto, setItemAberto] = useState('01');
+    const textoLoremIpsum = "Lorem Ipsum is simply dummy text of the printing and typesetting industry. Lorem Ipsum has been the industry's standard dummy text ever since the 1500s...";
+    const equipeDescricao = "10+ years of experience in digital marketing. Expertise in SEO, PPC, and content strategy";
 
     const toggleItem = (numero) => {
-        // Se o item clicado já estiver aberto, fecha-o. Senão, abre-o.
         setItemAberto(itemAberto === numero ? null : numero);
     };
 
@@ -45,7 +64,7 @@ const WelcomeScreen = ({ navigation }) => {
                 </View>
             </View>
 
-            {/* Seção Principal (Hero) */}
+            {/* Seção Hero */}
             <View style={styles.heroSection}>
                 <View style={styles.heroTextContainer}>
                     <Text style={styles.heroTitle}>Movendo Ideias</Text>
@@ -71,7 +90,7 @@ const WelcomeScreen = ({ navigation }) => {
                 </View>
             </View>
 
-            {/* --- SEÇÃO "NOSSO PROCESSO DE TRABALHO" --- */}
+            {/* Seção Processo de Trabalho */}
             <View style={styles.processoSection}>
                 <View style={styles.processoHeader}>
                     <Text style={styles.processoTitle}>Nosso Processo de Trabalho</Text>
@@ -80,9 +99,23 @@ const WelcomeScreen = ({ navigation }) => {
                 <ProcessoItem numero="01" titulo="Projeto" conteudo={textoLoremIpsum} aberto={itemAberto === '01'} onPress={() => toggleItem('01')} />
                 <ProcessoItem numero="02" titulo="Coisa 2" conteudo={textoLoremIpsum} aberto={itemAberto === '02'} onPress={() => toggleItem('02')} />
                 <ProcessoItem numero="03" titulo="Coisa 3" conteudo={textoLoremIpsum} aberto={itemAberto === '03'} onPress={() => toggleItem('03')} />
-                <ProcessoItem numero="04" titulo="Coisa 4" conteudo={textoLoremIpsum} aberto={itemAberto === '04'} onPress={() => toggleItem('04')} />
-                <ProcessoItem numero="05" titulo="Coisa 5" conteudo={textoLoremIpsum} aberto={itemAberto === '05'} onPress={() => toggleItem('05')} />
-                <ProcessoItem numero="06" titulo="Coisa 6" conteudo={textoLoremIpsum} aberto={itemAberto === '06'} onPress={() => toggleItem('06')} />
+            </View>
+
+            {/* --- NOVA SEÇÃO "EQUIPE" --- */}
+            <View style={styles.equipeSection}>
+                <View style={styles.equipeHeader}>
+                    <Text style={styles.equipeTitle}>Equipe</Text>
+                    <Text style={styles.equipeSubtitle}>Conheça a equipe que faz o projeto ser realidade!!</Text>
+                </View>
+                <View style={styles.equipeGrid}>
+                    <EquipeCard imagem={require('../../assets/icon.png')} nome="John Smith" cargo="CEO and Founder" descricao={equipeDescricao} />
+                    <EquipeCard imagem={require('../../assets/icon.png')} nome="Jane Doe" cargo="Director of Operations" descricao={equipeDescricao} />
+                    <EquipeCard imagem={require('../../assets/icon.png')} nome="Michael Brown" cargo="Senior SEO Specialist" descricao={equipeDescricao} />
+                    <EquipeCard imagem={require('../../assets/icon.png')} nome="Emily Johnson" cargo="PPC Manager" descricao={equipeDescricao} />
+                </View>
+                <TouchableOpacity style={styles.verEquipeButton}>
+                    <Text style={styles.verEquipeButtonText}>Ver toda equipe</Text>
+                </TouchableOpacity>
             </View>
         </ScrollView>
     );
@@ -212,7 +245,7 @@ const styles = StyleSheet.create({
         height: 150,
         resizeMode: 'contain',
     },
-    // --- NOVOS ESTILOS PARA "PROCESSO DE TRABALHO" ---
+    // Seção Processo de Trabalho
     processoSection: {
         padding: 40,
         backgroundColor: '#fff',
@@ -227,7 +260,7 @@ const styles = StyleSheet.create({
         fontWeight: 'bold',
         paddingVertical: 5,
         paddingHorizontal: 10,
-        alignSelf: 'flex-start', // Para o fundo não ocupar a linha toda
+        alignSelf: 'flex-start',
     },
     processoSubtitle: {
         fontSize: 16,
@@ -241,7 +274,7 @@ const styles = StyleSheet.create({
         marginBottom: 15,
         paddingHorizontal: 20,
         paddingVertical: 15,
-        overflow: 'hidden', // Garante que o conteúdo não saia das bordas arredondadas
+        overflow: 'hidden',
     },
     processoItemAberto: {
         backgroundColor: '#28a745',
@@ -291,10 +324,88 @@ const styles = StyleSheet.create({
     },
     processoItemContent: {
         marginTop: 15,
-        paddingLeft: 37, // Para alinhar com o título
+        paddingLeft: 37,
         fontSize: 16,
         color: '#fff',
         lineHeight: 24,
+    },
+    // --- NOVOS ESTILOS PARA "EQUIPE" ---
+    equipeSection: {
+        padding: 40,
+        backgroundColor: '#fff',
+    },
+    equipeHeader: {
+        marginBottom: 30,
+    },
+    equipeTitle: {
+        backgroundColor: '#28a745',
+        color: '#fff',
+        fontSize: 24,
+        fontWeight: 'bold',
+        paddingVertical: 5,
+        paddingHorizontal: 10,
+        alignSelf: 'flex-start',
+    },
+    equipeSubtitle: {
+        fontSize: 16,
+        color: 'gray',
+        marginTop: 10,
+    },
+    equipeGrid: {
+        flexDirection: 'row',
+        flexWrap: 'wrap',
+        justifyContent: 'space-between',
+    },
+    equipeCard: {
+        width: '48%', // Para ter 2 cartões por linha com um pequeno espaço
+        borderWidth: 1,
+        borderColor: '#e2e8f0',
+        borderRadius: 20,
+        padding: 20,
+        marginBottom: 20,
+    },
+    equipeCardHeader: {
+        flexDirection: 'row',
+        alignItems: 'flex-start',
+        marginBottom: 15,
+    },
+    equipeAvatar: {
+        width: 50,
+        height: 50,
+        marginRight: 10,
+    },
+    equipeHeaderText: {
+        flex: 1,
+    },
+    equipeNome: {
+        fontSize: 18,
+        fontWeight: 'bold',
+        color: '#1A202C',
+    },
+    equipeCargo: {
+        fontSize: 14,
+        color: 'gray',
+    },
+    linkedinIcon: {
+        width: 24,
+        height: 24,
+    },
+    equipeDescricao: {
+        fontSize: 14,
+        color: '#4A5568',
+        lineHeight: 20,
+    },
+    verEquipeButton: {
+        backgroundColor: '#1A202C',
+        paddingVertical: 15,
+        borderRadius: 30,
+        alignItems: 'center',
+        marginTop: 20,
+    },
+    verEquipeButtonText: {
+        color: '#fff',
+        fontSize: 16,
+        fontWeight: 'bold',
     },
 });
 
