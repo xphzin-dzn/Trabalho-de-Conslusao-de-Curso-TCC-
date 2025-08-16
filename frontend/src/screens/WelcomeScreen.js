@@ -30,7 +30,6 @@ const EquipeCard = ({ imagem, nome, cargo, descricao }) => {
                     <Text style={styles.equipeCargo}>{cargo}</Text>
                 </View>
                 <TouchableOpacity>
-                    {/* Substitua 'icon.png' pelo seu ícone do LinkedIn */}
                     <Image source={require('../../assets/icon.png')} style={styles.linkedinIcon} />
                 </TouchableOpacity>
             </View>
@@ -101,7 +100,7 @@ const WelcomeScreen = ({ navigation }) => {
                 <ProcessoItem numero="03" titulo="Coisa 3" conteudo={textoLoremIpsum} aberto={itemAberto === '03'} onPress={() => toggleItem('03')} />
             </View>
 
-            {/* --- NOVA SEÇÃO "EQUIPE" --- */}
+            {/* Seção Equipe */}
             <View style={styles.equipeSection}>
                 <View style={styles.equipeHeader}>
                     <Text style={styles.equipeTitle}>Equipe</Text>
@@ -123,10 +122,8 @@ const WelcomeScreen = ({ navigation }) => {
 
 const styles = StyleSheet.create({
     container: {
-        flex: 1,
         backgroundColor: '#fff',
     },
-    // Cabeçalho
     header: {
         flexDirection: 'row',
         justifyContent: 'space-between',
@@ -162,7 +159,6 @@ const styles = StyleSheet.create({
         fontSize: 16,
         fontWeight: '500',
     },
-    // Seção Hero
     heroSection: {
         flexDirection: 'row',
         paddingHorizontal: 40,
@@ -202,7 +198,6 @@ const styles = StyleSheet.create({
         height: 200,
         resizeMode: 'contain',
     },
-    // Seção de Apoio
     apoioSectionWrapper: {
         padding: 20,
     },
@@ -245,7 +240,6 @@ const styles = StyleSheet.create({
         height: 150,
         resizeMode: 'contain',
     },
-    // Seção Processo de Trabalho
     processoSection: {
         padding: 40,
         backgroundColor: '#fff',
@@ -329,7 +323,6 @@ const styles = StyleSheet.create({
         color: '#fff',
         lineHeight: 24,
     },
-    // --- NOVOS ESTILOS PARA "EQUIPE" ---
     equipeSection: {
         padding: 40,
         backgroundColor: '#fff',
@@ -357,7 +350,7 @@ const styles = StyleSheet.create({
         justifyContent: 'space-between',
     },
     equipeCard: {
-        width: '48%', // Para ter 2 cartões por linha com um pequeno espaço
+        width: '48%',
         borderWidth: 1,
         borderColor: '#e2e8f0',
         borderRadius: 20,
