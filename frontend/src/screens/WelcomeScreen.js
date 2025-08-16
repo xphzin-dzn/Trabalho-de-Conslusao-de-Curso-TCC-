@@ -29,7 +29,7 @@ const WelcomeScreen = ({ navigation }) => {
                     </TouchableOpacity>
                 </View>
                 {/* ATENÇÃO: Substitua 'icon.png' pelo nome da sua imagem de ilustração principal */}
-                <Image source={require('../../assets/icon.png')} style={styles.heroImage} />
+                <Image source={require('../../assets/ifeco.png')} style={styles.heroImage} />
             </View>
 
             {/* Seção de Apoio */}
@@ -66,8 +66,8 @@ const styles = StyleSheet.create({
         width: '100%',
     },
     logo: {
-        width: 320, // Tamanho aumentado
-        height: 190, // Tamanho aumentado
+        width: 149, // Tamanho aumentado
+        height: 149, // Tamanho aumentado
         resizeMode: 'contain',
     },
     headerActions: {

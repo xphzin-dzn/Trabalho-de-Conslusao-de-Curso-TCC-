@@ -52,7 +52,7 @@ const RegisterScreen = ({ navigation }) => {
         <View style={styles.container}>
             <Image source={require('../../assets/icon.png')} style={styles.logo} />
             <Text style={styles.title}>Crie sua conta</Text>
-            <Text style={styles.subtitle}>Crie sua conta, é grátis!</Text>
+            <Text style={styles.subtitle}>Crie sua conta para continuar.</Text>
 
             <TextInput
                 style={styles.input}
