@@ -1,43 +1,9 @@
 import React, { useState } from 'react';
 import { View, Text, TouchableOpacity, StyleSheet, Image, ScrollView } from 'react-native';
 
-// --- COMPONENTES REUTILIZÁVEIS ---
-
-const ProcessoItem = ({ numero, titulo, conteudo, aberto, onPress }) => {
-    return (
-        <View style={[styles.processoItem, aberto && styles.processoItemAberto]}>
-            <TouchableOpacity onPress={onPress} style={styles.processoItemHeader}>
-                <Text style={[styles.processoItemNumber, aberto && styles.processoItemNumeroAberto]}>{numero}</Text>
-                <Text style={[styles.processoItemTitle, aberto && styles.processoItemTitleAberto]}>{titulo}</Text>
-                <View style={[styles.processoItemToggle, aberto && styles.processoItemToggleAberto]}>
-                    <Text style={[styles.processoItemToggleText, aberto && styles.processoItemToggleTextAberto]}>{aberto ? '−' : '+'}</Text>
-                </View>
-            </TouchableOpacity>
-            {aberto && (
-                <Text style={styles.processoItemContent}>{conteudo}</Text>
-            )}
-        </View>
-    );
-};
-
-const EquipeCard = ({ imagem, nome, cargo, descricao }) => {
-    return (
-        <View style={styles.equipeCard}>
-            <View style={styles.equipeCardHeader}>
-                <Image source={imagem} style={styles.equipeAvatar} />
-                <View style={styles.equipeHeaderText}>
-                    <Text style={styles.equipeNome}>{nome}</Text>
-                    <Text style={styles.equipeCargo}>{cargo}</Text>
-                </View>
-                <TouchableOpacity>
-                    <Image source={require('../../assets/icon.png')} style={styles.linkedinIcon} />
-                </TouchableOpacity>
-            </View>
-            <Text style={styles.equipeDescricao}>{descricao}</Text>
-        </View>
-    );
-};
-
+// Importe os seus novos componentes
+import ProcessoItem from '../components/ProcessoItem';
+import EquipeCard from '../components/EquipeCard';
 
 const WelcomeScreen = ({ navigation }) => {
     const [itemAberto, setItemAberto] = useState('01');
@@ -261,68 +227,6 @@ const styles = StyleSheet.create({
         color: 'gray',
         marginTop: 10,
     },
-    processoItem: {
-        borderWidth: 1,
-        borderColor: '#e2e8f0',
-        borderRadius: 30,
-        marginBottom: 15,
-        paddingHorizontal: 20,
-        paddingVertical: 15,
-        overflow: 'hidden',
-    },
-    processoItemAberto: {
-        backgroundColor: '#28a745',
-        borderColor: '#28a745',
-    },
-    processoItemHeader: {
-        flexDirection: 'row',
-        alignItems: 'center',
-    },
-    processoItemNumber: {
-        fontSize: 22,
-        fontWeight: 'bold',
-        color: '#a0aec0',
-        marginRight: 15,
-    },
-    processoItemNumeroAberto: {
-        color: '#fff',
-    },
-    processoItemTitle: {
-        flex: 1,
-        fontSize: 20,
-        fontWeight: '600',
-        color: '#1A202C',
-    },
-    processoItemTitleAberto: {
-        color: '#fff',
-    },
-    processoItemToggle: {
-        width: 30,
-        height: 30,
-        borderRadius: 15,
-        borderWidth: 1,
-        borderColor: '#e2e8f0',
-        justifyContent: 'center',
-        alignItems: 'center',
-    },
-    processoItemToggleAberto: {
-        backgroundColor: '#fff',
-        borderColor: '#fff',
-    },
-    processoItemToggleText: {
-        fontSize: 20,
-        color: '#a0aec0',
-    },
-    processoItemToggleTextAberto: {
-        color: '#28a745',
-    },
-    processoItemContent: {
-        marginTop: 15,
-        paddingLeft: 37,
-        fontSize: 16,
-        color: '#fff',
-        lineHeight: 24,
-    },
     equipeSection: {
         padding: 40,
         backgroundColor: '#fff',
@@ -348,45 +252,6 @@ const styles = StyleSheet.create({
         flexDirection: 'row',
         flexWrap: 'wrap',
         justifyContent: 'space-between',
-    },
-    equipeCard: {
-        width: '48%',
-        borderWidth: 1,
-        borderColor: '#e2e8f0',
-        borderRadius: 20,
-        padding: 20,
-        marginBottom: 20,
-    },
-    equipeCardHeader: {
-        flexDirection: 'row',
-        alignItems: 'flex-start',
-        marginBottom: 15,
-    },
-    equipeAvatar: {
-        width: 50,
-        height: 50,
-        marginRight: 10,
-    },
-    equipeHeaderText: {
-        flex: 1,
-    },
-    equipeNome: {
-        fontSize: 18,
-        fontWeight: 'bold',
-        color: '#1A202C',
-    },
-    equipeCargo: {
-        fontSize: 14,
-        color: 'gray',
-    },
-    linkedinIcon: {
-        width: 24,
-        height: 24,
-    },
-    equipeDescricao: {
-        fontSize: 14,
-        color: '#4A5568',
-        lineHeight: 20,
     },
     verEquipeButton: {
         backgroundColor: '#1A202C',
