@@ -1,4 +1,4 @@
-import React, { useState } from 'react';
+import React, { useState, useEffect } from 'react'; // 1. Importar o useEffect
 import { View, Text, TextInput, TouchableOpacity, Alert, StyleSheet, Image } from 'react-native';
 import api from '../api';
 
@@ -8,9 +8,26 @@ const RegisterScreen = ({ navigation }) => {
     const [password, setPassword] = useState('');
     const [confirmPassword, setConfirmPassword] = useState('');
 
+    const [emailError, setEmailError] = useState('');
+    // 2. Novo estado para o erro de confirmação de senha
+    const [confirmPasswordError, setConfirmPasswordError] = useState('');
+
+    // 3. useEffect para validar as senhas em tempo real
+    useEffect(() => {
+        // Só mostra o erro se o campo "Confirmar Senha" não estiver vazio
+        if (confirmPassword && password !== confirmPassword) {
+            setConfirmPasswordError('As senhas não coincidem.');
+        } else {
+            setConfirmPasswordError(''); // Limpa o erro se as senhas coincidirem ou o campo estiver vazio
+        }
+    }, [password, confirmPassword]); // Executa sempre que 'password' ou 'confirmPassword' mudar
+
     const handleRegister = async () => {
+        setEmailError('');
+
+        // Mantemos esta verificação como uma segurança final antes de enviar
         if (password !== confirmPassword) {
-            Alert.alert('Erro', 'As senhas não coincidem.');
+            setConfirmPasswordError('As senhas não coincidem.');
             return;
         }
 
@@ -22,7 +39,11 @@ const RegisterScreen = ({ navigation }) => {
             navigation.navigate('Home', { token });
 
         } catch (error) {
-            Alert.alert('Erro no Cadastro', 'Não foi possível criar a conta. Tente outro nome de usuário ou e-mail.');
+            if (error.response && error.response.data && error.response.data.error === 'Usuário ou email já existe.') {
+                setEmailError('Este e-mail já está em uso.');
+            } else {
+                Alert.alert('Erro no Registo', 'Não foi possível criar a conta.');
+            }
             console.error(error);
         }
     };
@@ -44,10 +65,15 @@ const RegisterScreen = ({ navigation }) => {
                 style={styles.input}
                 placeholder="E-mail"
                 value={email}
-                onChangeText={setEmail}
+                onChangeText={(text) => {
+                    setEmail(text);
+                    if (emailError) setEmailError('');
+                }}
                 keyboardType="email-address"
                 autoCapitalize="none"
             />
+            {emailError ? <Text style={styles.errorText}>{emailError}</Text> : null}
+
             <TextInput
                 style={styles.input}
                 placeholder="Senha"
@@ -62,6 +88,8 @@ const RegisterScreen = ({ navigation }) => {
                 onChangeText={setConfirmPassword}
                 secureTextEntry
             />
+            {/* 4. Exibe a mensagem de erro de confirmação de senha aqui */}
+            {confirmPasswordError ? <Text style={styles.errorText}>{confirmPasswordError}</Text> : null}
 
             <TouchableOpacity style={styles.button} onPress={handleRegister}>
                 <Text style={styles.buttonText}>Criar conta</Text>
@@ -107,9 +135,15 @@ const styles = StyleSheet.create({
         borderColor: '#ccc',
         borderWidth: 1,
         borderRadius: 8,
-        marginBottom: 15,
+        marginBottom: 5,
         paddingHorizontal: 15,
         fontSize: 16,
+    },
+    errorText: {
+        color: 'red',
+        textAlign: 'left',
+        marginBottom: 10,
+        paddingLeft: 5,
     },
     button: {
         backgroundColor: '#28a745',
