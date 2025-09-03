@@ -11,7 +11,6 @@ const EquipeCard = ({ imagem, nome, cargo, descricao }) => {
                     <Text style={styles.equipeCargo}>{cargo}</Text>
                 </View>
                 <TouchableOpacity>
-                    {/* Substitua 'icon.png' pelo seu ícone do LinkedIn */}
                     <Image source={require('../../assets/icon.png')} style={styles.linkedinIcon} />
                 </TouchableOpacity>
             </View>
@@ -22,7 +21,7 @@ const EquipeCard = ({ imagem, nome, cargo, descricao }) => {
 
 const styles = StyleSheet.create({
     equipeCard: {
-        width: '48%', // Para ter 2 cartões por linha com um pequeno espaço
+        width: '48%',
         borderWidth: 1,
         borderColor: '#e2e8f0',
         borderRadius: 20,

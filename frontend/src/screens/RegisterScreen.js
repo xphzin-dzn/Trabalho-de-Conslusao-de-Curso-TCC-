@@ -1,4 +1,4 @@
-import React, { useState, useEffect } from 'react'; // 1. Importar o useEffect
+import React, { useState, useEffect } from 'react';
 import { View, Text, TextInput, TouchableOpacity, Alert, StyleSheet, Image } from 'react-native';
 import api from '../api';
 
@@ -9,23 +9,19 @@ const RegisterScreen = ({ navigation }) => {
     const [confirmPassword, setConfirmPassword] = useState('');
 
     const [emailError, setEmailError] = useState('');
-    // 2. Novo estado para o erro de confirmação de senha
     const [confirmPasswordError, setConfirmPasswordError] = useState('');
 
-    // 3. useEffect para validar as senhas em tempo real
     useEffect(() => {
-        // Só mostra o erro se o campo "Confirmar Senha" não estiver vazio
         if (confirmPassword && password !== confirmPassword) {
             setConfirmPasswordError('As senhas não coincidem.');
         } else {
-            setConfirmPasswordError(''); // Limpa o erro se as senhas coincidirem ou o campo estiver vazio
+            setConfirmPasswordError('');
         }
-    }, [password, confirmPassword]); // Executa sempre que 'password' ou 'confirmPassword' mudar
+    }, [password, confirmPassword]);
 
     const handleRegister = async () => {
         setEmailError('');
 
-        // Mantemos esta verificação como uma segurança final antes de enviar
         if (password !== confirmPassword) {
             setConfirmPasswordError('As senhas não coincidem.');
             return;
@@ -88,7 +84,7 @@ const RegisterScreen = ({ navigation }) => {
                 onChangeText={setConfirmPassword}
                 secureTextEntry
             />
-            {/* 4. Exibe a mensagem de erro de confirmação de senha aqui */}
+            {}
             {confirmPasswordError ? <Text style={styles.errorText}>{confirmPasswordError}</Text> : null}
 
             <TouchableOpacity style={styles.button} onPress={handleRegister}>

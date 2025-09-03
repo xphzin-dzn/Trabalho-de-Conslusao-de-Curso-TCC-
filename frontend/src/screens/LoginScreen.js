@@ -5,12 +5,10 @@ import api from '../api';
 const LoginScreen = ({ navigation }) => {
     const [email, setEmail] = useState('');
     const [password, setPassword] = useState('');
-    // Estados separados para cada tipo de erro
     const [emailError, setEmailError] = useState('');
     const [passwordError, setPasswordError] = useState('');
 
     const handleLogin = async () => {
-        // Limpa os erros anteriores
         setEmailError('');
         setPasswordError('');
 
@@ -19,21 +17,17 @@ const LoginScreen = ({ navigation }) => {
             const { token } = response.data;
             navigation.navigate('Home', { token });
         } catch (error) {
-            // Verifica se há uma resposta com dados do servidor
             if (error.response && error.response.data && error.response.data.error) {
                 const errorMessage = error.response.data.error;
 
-                // Verifica a mensagem específica do erro e atualiza o estado correspondente
                 if (errorMessage === 'Usuário não encontrado') {
                     setEmailError('O e-mail digitado não foi encontrado.');
                 } else if (errorMessage === 'Senha incorreta') {
                     setPasswordError('A senha está incorreta.');
                 } else {
-                    // Para qualquer outro erro vindo da API
                     Alert.alert('Erro no Login', errorMessage);
                 }
             } else {
-                // Para erros de conexão ou outros problemas
                 Alert.alert('Erro de Conexão', 'Não foi possível conectar ao servidor.');
             }
             console.error(error);
@@ -52,12 +46,12 @@ const LoginScreen = ({ navigation }) => {
                 value={email}
                 onChangeText={(text) => {
                     setEmail(text);
-                    if (emailError) setEmailError(''); // Limpa o erro ao começar a digitar
+                    if (emailError) setEmailError('');
                 }}
                 keyboardType="email-address"
                 autoCapitalize="none"
             />
-            {/* Exibe a mensagem de erro de e-mail aqui */}
+            {}
             {emailError ? <Text style={styles.errorText}>{emailError}</Text> : null}
 
             <TextInput
@@ -66,16 +60,16 @@ const LoginScreen = ({ navigation }) => {
                 value={password}
                 onChangeText={(text) => {
                     setPassword(text);
-                    if (passwordError) setPasswordError(''); // Limpa o erro ao começar a digitar
+                    if (passwordError) setPasswordError('');
                 }}
                 secureTextEntry
             />
-            {/* Exibe a mensagem de erro de senha aqui */}
+            {}
             {passwordError ? <Text style={styles.errorText}>{passwordError}</Text> : null}
 
             <TouchableOpacity
                 style={styles.forgotPasswordContainer}
-                onPress={() => {/* Navegar para tela de recuperação de senha */ }}
+                onPress={() => {}}
             >
                 <Text style={styles.forgotPasswordText}>Esqueceu sua senha?</Text>
             </TouchableOpacity>
@@ -124,7 +118,7 @@ const styles = StyleSheet.create({
         borderColor: '#ccc',
         borderWidth: 1,
         borderRadius: 8,
-        marginBottom: 5, // Diminuído para dar espaço à mensagem de erro
+        marginBottom: 5,
         paddingHorizontal: 15,
         fontSize: 16,
     },

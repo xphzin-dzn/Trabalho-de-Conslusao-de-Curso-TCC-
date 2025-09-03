@@ -2,7 +2,7 @@ import React from 'react';
 import { NavigationContainer } from '@react-navigation/native';
 import { createStackNavigator } from '@react-navigation/stack';
 
-import WelcomeScreen from '../screens/WelcomeScreen'; // 1. Importe a nova tela
+import WelcomeScreen from '../screens/WelcomeScreen';
 import LoginScreen from '../screens/LoginScreen';
 import RegisterScreen from '../screens/RegisterScreen';
 import HomeScreen from '../screens/HomeScreen';
@@ -12,9 +12,9 @@ const Stack = createStackNavigator();
 const AppNavigator = () => {
     return (
         <NavigationContainer>
-            {/* 2. Mude a rota inicial para "Welcome" */}
+            {}
             <Stack.Navigator initialRouteName="Welcome">
-                {/* 3. Adicione a nova tela à pilha de navegação */}
+                {}
                 <Stack.Screen
                     name="Welcome"
                     component={WelcomeScreen}
@@ -33,7 +33,6 @@ const AppNavigator = () => {
                 <Stack.Screen
                     name="Home"
                     component={HomeScreen}
-                    // Podemos dar um título à tela principal se quisermos
                     options={{ title: 'Dashboard' }}
                 />
             </Stack.Navigator>

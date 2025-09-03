@@ -2,11 +2,10 @@ import React, { useState, useEffect, useCallback } from 'react';
 import { View, Text, TouchableOpacity, Alert, StyleSheet, ScrollView, ActivityIndicator, RefreshControl } from 'react-native';
 import api from '../api';
 
-// Um componente reutilizável para os cartões de dados
 const InfoCard = ({ icon, label, value, unit }) => (
     <View style={styles.card}>
-        {/* Idealmente, o 'icon' seria uma imagem diferente para cada card */}
-        {/* <Image source={icon} style={styles.cardIcon} /> */}
+        {}
+        {}
         <Text style={styles.cardLabel}>{label}</Text>
         <Text style={styles.cardValue}>{value} <Text style={styles.cardUnit}>{unit}</Text></Text>
     </View>
@@ -25,7 +24,6 @@ const HomeScreen = ({ route, navigation }) => {
                     Authorization: `Bearer ${token}`,
                 },
             });
-            // Vamos pegar apenas o dado mais recente da lista
             setSensorData(response.data[0] || null);
         } catch (error) {
             Alert.alert('Erro', 'Não foi possível carregar os dados do sensor.');
@@ -46,7 +44,6 @@ const HomeScreen = ({ route, navigation }) => {
     }, []);
 
     const handleLogout = () => {
-        // Limpar o token se estiver guardado e voltar ao início
         navigation.navigate('Welcome');
     };
 
@@ -137,7 +134,6 @@ const styles = StyleSheet.create({
         padding: 20,
         borderRadius: 20,
         marginBottom: 15,
-        // Sombra para dar elevação
         shadowColor: '#000',
         shadowOffset: { width: 0, height: 2 },
         shadowOpacity: 0.1,

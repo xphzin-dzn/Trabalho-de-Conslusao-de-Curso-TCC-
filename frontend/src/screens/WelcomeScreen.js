@@ -1,7 +1,6 @@
 import React, { useState } from 'react';
 import { View, Text, TouchableOpacity, StyleSheet, Image, ScrollView } from 'react-native';
 
-// Importe os seus novos componentes
 import ProcessoItem from '../components/ProcessoItem';
 import EquipeCard from '../components/EquipeCard';
 
@@ -16,7 +15,7 @@ const WelcomeScreen = ({ navigation }) => {
 
     return (
         <ScrollView style={styles.container}>
-            {/* Cabeçalho */}
+            {}
             <View style={styles.header}>
                 <Image source={require('../../assets/icon.png')} style={styles.logo} />
                 <View style={styles.headerActions}>
@@ -29,7 +28,7 @@ const WelcomeScreen = ({ navigation }) => {
                 </View>
             </View>
 
-            {/* Seção Hero */}
+            {}
             <View style={styles.heroSection}>
                 <View style={styles.heroTextContainer}>
                     <Text style={styles.heroTitle}>Movendo Ideias</Text>
@@ -41,7 +40,7 @@ const WelcomeScreen = ({ navigation }) => {
                 <Image source={require('../../assets/icon.png')} style={styles.heroImage} />
             </View>
 
-            {/* Seção de Apoio */}
+            {}
             <View style={styles.apoioSectionWrapper}>
                 <View style={styles.apoioSection}>
                     <View style={styles.apoioTextContainer}>
@@ -55,7 +54,7 @@ const WelcomeScreen = ({ navigation }) => {
                 </View>
             </View>
 
-            {/* Seção Processo de Trabalho */}
+            {}
             <View style={styles.processoSection}>
                 <View style={styles.processoHeader}>
                     <Text style={styles.processoTitle}>Nosso Processo de Trabalho</Text>
@@ -66,7 +65,7 @@ const WelcomeScreen = ({ navigation }) => {
                 <ProcessoItem numero="03" titulo="Coisa 3" conteudo={textoLoremIpsum} aberto={itemAberto === '03'} onPress={() => toggleItem('03')} />
             </View>
 
-            {/* Seção Equipe */}
+            {}
             <View style={styles.equipeSection}>
                 <View style={styles.equipeHeader}>
                     <Text style={styles.equipeTitle}>Equipe</Text>
