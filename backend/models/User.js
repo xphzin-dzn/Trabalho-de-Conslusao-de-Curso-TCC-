@@ -13,7 +13,6 @@ const User = sequelize.define('User', {
     allowNull: false,
     unique: true
   },
-  // Adicione o campo de email aqui
   email: {
     type: DataTypes.STRING,
     allowNull: false,

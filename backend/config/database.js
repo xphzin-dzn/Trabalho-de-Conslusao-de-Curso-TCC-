@@ -1,4 +1,4 @@
-const { Sequelize } = require('sequelize'); // Adicione esta linha
+const { Sequelize } = require('sequelize');
 
 const sequelize = new Sequelize('tcc_esp32', 'root', '', {
   host: 'localhost',
