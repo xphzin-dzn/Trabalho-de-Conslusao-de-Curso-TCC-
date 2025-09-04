@@ -7,7 +7,7 @@ const RegisterScreen = ({ navigation }) => {
     const [email, setEmail] = useState('');
     const [password, setPassword] = useState('');
     const [confirmPassword, setConfirmPassword] = useState('');
-    
+
     const [emailError, setEmailError] = useState('');
     const [confirmPasswordError, setConfirmPasswordError] = useState('');
 
@@ -29,16 +29,17 @@ const RegisterScreen = ({ navigation }) => {
         }
 
         try {
-            // A chamada à API continua a mesma.
             await api.post('/api/auth/register', { username, email, password });
 
-            // Mostra uma mensagem de sucesso e redireciona para a tela de Login
+            // --- ALTERAÇÃO PRINCIPAL AQUI ---
+            // Primeiro, mostramos a mensagem de sucesso ao utilizador.
             Alert.alert(
                 'Sucesso',
-                'Conta criada com sucesso! Por favor, faça o login.',
-                // --- ALTERAÇÃO PRINCIPAL AQUI ---
-                [{ text: 'OK', onPress: () => navigation.navigate('Login') }]
+                'Conta criada com sucesso! Por favor, faça o login.'
             );
+
+            // Em segundo, navegamos para a tela de Login.
+            navigation.navigate('Login');
 
         } catch (error) {
             if (error.response && error.response.data && error.response.data.error === 'Usuário ou email já existe.') {
