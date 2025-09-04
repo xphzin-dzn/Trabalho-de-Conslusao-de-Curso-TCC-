@@ -1,6 +1,7 @@
 const { DataTypes } = require('sequelize');
 const sequelize = require('../config/database');
 const bcrypt = require('bcryptjs');
+const crypto = require('crypto');
 
 const User = sequelize.define('User', {
   id: {
@@ -24,17 +25,46 @@ const User = sequelize.define('User', {
   password: {
     type: DataTypes.STRING,
     allowNull: false
-  }
+  },
+  resetPasswordToken: {
+    type: DataTypes.STRING,
+    allowNull: true,
+  },
+  resetPasswordExpires: {
+    type: DataTypes.DATE,
+    allowNull: true,
+  },
 }, {
   hooks: {
+    // Este hook encripta a senha quando um novo utilizador é criado
     beforeCreate: async (user) => {
       user.password = await bcrypt.hash(user.password, 10);
+    },
+    // --- HOOK CORRIGIDO E ADICIONADO ABAIXO ---
+    // Este hook encripta a senha sempre que ela for atualizada
+    beforeUpdate: async (user) => {
+      if (user.changed('password')) {
+        user.password = await bcrypt.hash(user.password, 10);
+      }
     }
   }
 });
 
-User.prototype.validPassword = async function (password) {
+User.prototype.validPassword = async function(password) {
   return await bcrypt.compare(password, this.password);
+};
+
+User.prototype.generatePasswordResetToken = function() {
+    const resetToken = crypto.randomBytes(20).toString('hex');
+    
+    this.resetPasswordToken = crypto
+        .createHash('sha256')
+        .update(resetToken)
+        .digest('hex');
+    
+    this.resetPasswordExpires = Date.now() + 15 * 60 * 1000;
+    
+    return resetToken;
 };
 
 module.exports = User;

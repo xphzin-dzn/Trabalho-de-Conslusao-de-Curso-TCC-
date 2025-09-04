@@ -99,7 +99,7 @@ module.exports = {
           resetPasswordToken: hashedToken,
         }
       });
-
+      
       // Verifica se o token existe e não expirou.
       if (!user || user.resetPasswordExpires < Date.now()) {
         return res.status(400).json({ error: 'Token inválido ou expirado.' });
@@ -125,7 +125,7 @@ module.exports = {
    */
   async changePassword(req, res) {
     // O ID do utilizador vem do token, que foi validado pelo middleware de autenticação.
-    const userId = req.userId;
+    const userId = req.userId; 
     const { currentPassword, newPassword } = req.body;
 
     try {
