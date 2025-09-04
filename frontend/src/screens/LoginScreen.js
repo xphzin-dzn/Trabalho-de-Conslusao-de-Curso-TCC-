@@ -15,7 +15,7 @@ const LoginScreen = ({ navigation }) => {
         try {
             const response = await api.post('/api/auth/login', { email, password });
             const { token } = response.data;
-            navigation.navigate('Home', { token });
+            navigation.navigate('Main', { token });
         } catch (error) {
             if (error.response && error.response.data && error.response.data.error) {
                 const errorMessage = error.response.data.error;
