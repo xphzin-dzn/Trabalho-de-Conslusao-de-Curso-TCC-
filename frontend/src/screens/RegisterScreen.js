@@ -7,7 +7,7 @@ const RegisterScreen = ({ navigation }) => {
     const [email, setEmail] = useState('');
     const [password, setPassword] = useState('');
     const [confirmPassword, setConfirmPassword] = useState('');
-
+    
     const [emailError, setEmailError] = useState('');
     const [confirmPasswordError, setConfirmPasswordError] = useState('');
 
@@ -21,6 +21,7 @@ const RegisterScreen = ({ navigation }) => {
 
     const handleRegister = async () => {
         setEmailError('');
+        setConfirmPasswordError('');
 
         if (password !== confirmPassword) {
             setConfirmPasswordError('As senhas não coincidem.');
@@ -28,11 +29,14 @@ const RegisterScreen = ({ navigation }) => {
         }
 
         try {
-            const response = await api.post('/api/auth/register', { username, email, password });
-            const { token } = response.data;
+            await api.post('/api/auth/register', { username, email, password });
 
-            Alert.alert('Sucesso', 'Conta criada com sucesso!');
-            navigation.navigate('Home', { token });
+            Alert.alert(
+                'Sucesso',
+                'Conta criada com sucesso! Por favor, faça o login.',
+                // Redireciona para o Login após o registo
+                [{ text: 'OK', onPress: () => navigation.navigate('Login') }]
+            );
 
         } catch (error) {
             if (error.response && error.response.data && error.response.data.error === 'Usuário ou email já existe.') {
@@ -48,7 +52,7 @@ const RegisterScreen = ({ navigation }) => {
         <View style={styles.container}>
             <Image source={require('../../assets/icon.png')} style={styles.logo} />
             <Text style={styles.title}>Crie sua conta</Text>
-            <Text style={styles.subtitle}>Crie sua conta para continuar.</Text>
+            <Text style={styles.subtitle}>Crie sua conta, é grátis!</Text>
 
             <TextInput
                 style={styles.input}
@@ -84,7 +88,6 @@ const RegisterScreen = ({ navigation }) => {
                 onChangeText={setConfirmPassword}
                 secureTextEntry
             />
-            {}
             {confirmPasswordError ? <Text style={styles.errorText}>{confirmPasswordError}</Text> : null}
 
             <TouchableOpacity style={styles.button} onPress={handleRegister}>
