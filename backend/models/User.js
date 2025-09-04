@@ -14,7 +14,7 @@ const User = sequelize.define('User', {
     allowNull: false,
     unique: true
   },
-  // Adicionado campo de email que estava em falta
+  // Adicionado campo de email que estava em falta na sua versão
   email: {
     type: DataTypes.STRING,
     allowNull: false,
@@ -42,7 +42,7 @@ const User = sequelize.define('User', {
     beforeCreate: async (user) => {
       user.password = await bcrypt.hash(user.password, 10);
     },
-    // --- HOOK ADICIONADO E CORRIGIDO ---
+    // --- HOOK ADICIONADO E CORRIGIDO ABAIXO ---
     // Este hook encripta a senha sempre que ela for atualizada
     beforeUpdate: async (user) => {
       if (user.changed('password')) {
