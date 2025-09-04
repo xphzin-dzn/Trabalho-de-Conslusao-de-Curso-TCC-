@@ -1,89 +1,76 @@
 import React, { useState, useEffect, useCallback } from 'react';
-import { View, Text, TouchableOpacity, Alert, StyleSheet, ScrollView, ActivityIndicator, RefreshControl } from 'react-native';
+import { View, Text, TouchableOpacity, Alert, StyleSheet, ScrollView, ActivityIndicator, Image } from 'react-native';
 import api from '../api';
 
-const InfoCard = ({ icon, label, value, unit }) => (
-    <View style={styles.card}>
-        {}
-        {}
-        <Text style={styles.cardLabel}>{label}</Text>
-        <Text style={styles.cardValue}>{value} <Text style={styles.cardUnit}>{unit}</Text></Text>
-    </View>
-);
-
 const HomeScreen = ({ route, navigation }) => {
-    const { token } = route.params;
+    // O token agora vem da navegação Stack para o navegador Tab
+    const token = route.params?.token;
     const [sensorData, setSensorData] = useState(null);
     const [loading, setLoading] = useState(true);
-    const [refreshing, setRefreshing] = useState(false);
 
     const fetchSensorData = async () => {
+        if (!token) return; // Se não houver token, não faz nada
         try {
             const response = await api.get('/api/sensor-data', {
-                headers: {
-                    Authorization: `Bearer ${token}`,
-                },
+                headers: { Authorization: `Bearer ${token}` },
             });
             setSensorData(response.data[0] || null);
         } catch (error) {
             Alert.alert('Erro', 'Não foi possível carregar os dados do sensor.');
-            console.error(error);
         } finally {
             setLoading(false);
-            setRefreshing(false);
         }
     };
 
     useEffect(() => {
         fetchSensorData();
-    }, []);
-
-    const onRefresh = useCallback(() => {
-        setRefreshing(true);
-        fetchSensorData();
-    }, []);
-
-    const handleLogout = () => {
-        navigation.navigate('Welcome');
-    };
+    }, [token]);
 
     if (loading) {
-        return (
-            <View style={[styles.container, styles.center]}>
-                <ActivityIndicator size="large" color="#28a745" />
-            </View>
-        );
+        return <View style={styles.center}><ActivityIndicator size="large" color="#28a745" /></View>;
     }
 
     return (
-        <ScrollView
-            style={styles.container}
-            refreshControl={<RefreshControl refreshing={refreshing} onRefresh={onRefresh} />}
-        >
+        <ScrollView style={styles.container}>
             <View style={styles.header}>
-                <Text style={styles.headerTitle}>Dashboard</Text>
-                <TouchableOpacity onPress={handleLogout}>
-                    <Text style={styles.logoutButton}>Sair</Text>
+                <View>
+                    <Text style={styles.welcomeTitle}>Olá, Usuário 👋</Text>
+                    <Text style={styles.welcomeSubtitle}>Bem-vindo ao seu dashboard</Text>
+                </View>
+                <TouchableOpacity>
+                    <Image source={require('../../assets/icon.png')} style={styles.notificationIcon} />
                 </TouchableOpacity>
             </View>
 
-            <Text style={styles.welcomeMessage}>Bem-vindo!</Text>
-
-            {sensorData ? (
-                <>
-                    <View style={styles.grid}>
-                        <InfoCard label="Temperatura" value={sensorData.temperatura?.toFixed(1) || 'N/A'} unit="°C" />
-                        <InfoCard label="Velocidade" value={sensorData.velocidade?.toFixed(1) || 'N/A'} unit="km/h" />
-                        <InfoCard label="Tensão" value={sensorData.tensao?.toFixed(1) || 'N/A'} unit="V" />
-                        <InfoCard label="Corrente" value={sensorData.corrente?.toFixed(1) || 'N/A'} unit="A" />
+            <View style={styles.statusCard}>
+                <View style={styles.statusHeader}>
+                    <Text style={styles.statusTitle}>Status da Sessão</Text>
+                    <Text style={styles.statusActive}>Ativa</Text>
+                </View>
+                <View style={styles.statusBody}>
+                    <View style={styles.statusInfo}>
+                        <Text style={styles.infoLabel}>Consumo Atual</Text>
+                        <Text style={styles.infoValue}>
+                            {sensorData ? (sensorData.tensao * sensorData.corrente / 1000).toFixed(2) : '0.0'} kWh
+                        </Text>
                     </View>
-                    <Text style={styles.lastUpdated}>
-                        Última atualização: {new Date(sensorData.timestamp).toLocaleString('pt-BR')}
-                    </Text>
-                </>
-            ) : (
-                <Text style={styles.noDataText}>Nenhum dado de sensor encontrado. Puxe para baixo para atualizar.</Text>
-            )}
+                    <View style={styles.statusInfo}>
+                        <Text style={styles.infoLabel}>Velocidade</Text>
+                        <Text style={styles.infoValue}>
+                            {sensorData ? sensorData.velocidade.toFixed(1) : '0.0'} km/h
+                        </Text>
+                    </View>
+                </View>
+            </View>
+
+            <View style={styles.actionsContainer}>
+                <TouchableOpacity style={[styles.button, styles.stopButton]}>
+                    <Text style={[styles.buttonText, styles.stopButtonText]}>Parar Sessão</Text>
+                </TouchableOpacity>
+                <TouchableOpacity style={[styles.button, styles.exportButton]}>
+                    <Text style={[styles.buttonText, styles.exportButtonText]}>Exportar Dados</Text>
+                </TouchableOpacity>
+            </View>
         </ScrollView>
     );
 };
@@ -91,9 +78,10 @@ const HomeScreen = ({ route, navigation }) => {
 const styles = StyleSheet.create({
     container: {
         flex: 1,
-        backgroundColor: '#f7fafc',
+        backgroundColor: '#f8f9fa',
     },
     center: {
+        flex: 1,
         justifyContent: 'center',
         alignItems: 'center',
     },
@@ -102,70 +90,94 @@ const styles = StyleSheet.create({
         justifyContent: 'space-between',
         alignItems: 'center',
         paddingHorizontal: 20,
-        paddingTop: 50,
+        paddingTop: 60,
         paddingBottom: 20,
     },
-    headerTitle: {
+    welcomeTitle: {
+        fontSize: 24,
+        fontWeight: 'bold',
+        color: '#1A202C',
+    },
+    welcomeSubtitle: {
+        fontSize: 16,
+        color: 'gray',
+    },
+    notificationIcon: {
+        width: 24,
+        height: 24,
+    },
+    statusCard: {
+        backgroundColor: '#fff',
+        marginHorizontal: 20,
+        borderRadius: 20,
+        padding: 25,
+        shadowColor: '#000',
+        shadowOffset: { width: 0, height: 2 },
+        shadowOpacity: 0.1,
+        shadowRadius: 10,
+        elevation: 5,
+    },
+    statusHeader: {
+        flexDirection: 'row',
+        justifyContent: 'space-between',
+        alignItems: 'center',
+        borderBottomWidth: 1,
+        borderBottomColor: '#eee',
+        paddingBottom: 15,
+    },
+    statusTitle: {
+        fontSize: 18,
+        fontWeight: '600',
+        color: '#1A202C',
+    },
+    statusActive: {
+        color: '#28a745',
+        fontSize: 16,
+        fontWeight: 'bold',
+    },
+    statusBody: {
+        flexDirection: 'row',
+        justifyContent: 'space-around',
+        paddingTop: 20,
+    },
+    statusInfo: {
+        alignItems: 'center',
+    },
+    infoLabel: {
+        fontSize: 14,
+        color: 'gray',
+        marginBottom: 5,
+    },
+    infoValue: {
         fontSize: 28,
         fontWeight: 'bold',
         color: '#1A202C',
     },
-    logoutButton: {
-        fontSize: 16,
-        color: '#28a745',
-        fontWeight: '600',
-    },
-    welcomeMessage: {
-        fontSize: 22,
-        fontWeight: '300',
-        color: 'gray',
-        paddingHorizontal: 20,
-        marginBottom: 20,
-    },
-    grid: {
-        flexDirection: 'row',
-        flexWrap: 'wrap',
-        justifyContent: 'space-between',
+    actionsContainer: {
+        marginTop: 30,
         paddingHorizontal: 20,
     },
-    card: {
-        width: '48%',
-        backgroundColor: '#fff',
-        padding: 20,
-        borderRadius: 20,
+    button: {
+        paddingVertical: 15,
+        borderRadius: 15,
+        alignItems: 'center',
         marginBottom: 15,
-        shadowColor: '#000',
-        shadowOffset: { width: 0, height: 2 },
-        shadowOpacity: 0.1,
-        shadowRadius: 8,
-        elevation: 5,
     },
-    cardLabel: {
-        fontSize: 16,
-        color: 'gray',
+    stopButton: {
+        backgroundColor: '#dc3545',
     },
-    cardValue: {
-        fontSize: 32,
-        fontWeight: 'bold',
+    stopButtonText: {
+        color: '#fff',
+    },
+    exportButton: {
+        backgroundColor: '#e9ecef',
+    },
+    exportButtonText: {
         color: '#1A202C',
-        marginTop: 5,
     },
-    cardUnit: {
-        fontSize: 18,
-        fontWeight: 'normal',
-        color: 'gray',
-    },
-    lastUpdated: {
-        textAlign: 'center',
-        color: 'gray',
-        marginTop: 20,
-    },
-    noDataText: {
-        textAlign: 'center',
-        color: 'gray',
+    buttonText: {
         fontSize: 16,
-        marginTop: 50,
-        paddingHorizontal: 20,
+        fontWeight: 'bold',
     },
 });
 
