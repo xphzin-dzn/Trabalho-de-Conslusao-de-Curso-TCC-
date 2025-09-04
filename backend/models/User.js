@@ -14,7 +14,6 @@ const User = sequelize.define('User', {
     allowNull: false,
     unique: true
   },
-  // Adicionado campo de email que estava em falta na sua versão
   email: {
     type: DataTypes.STRING,
     allowNull: false,
@@ -27,7 +26,6 @@ const User = sequelize.define('User', {
     type: DataTypes.STRING,
     allowNull: false
   },
-  // Adicionados campos para redefinição de senha
   resetPasswordToken: {
     type: DataTypes.STRING,
     allowNull: true,
@@ -38,12 +36,10 @@ const User = sequelize.define('User', {
   },
 }, {
   hooks: {
-    // Este hook encripta a senha quando um novo utilizador é criado
     beforeCreate: async (user) => {
       user.password = await bcrypt.hash(user.password, 10);
     },
-    // --- HOOK ADICIONADO E CORRIGIDO ABAIXO ---
-    // Este hook encripta a senha sempre que ela for atualizada
+    // Este hook é essencial para encriptar a senha ao ser alterada
     beforeUpdate: async (user) => {
       if (user.changed('password')) {
         user.password = await bcrypt.hash(user.password, 10);
@@ -56,17 +52,10 @@ User.prototype.validPassword = async function (password) {
   return await bcrypt.compare(password, this.password);
 };
 
-// Função para gerar o token de redefinição de senha
 User.prototype.generatePasswordResetToken = function () {
   const resetToken = crypto.randomBytes(20).toString('hex');
-
-  this.resetPasswordToken = crypto
-    .createHash('sha256')
-    .update(resetToken)
-    .digest('hex');
-
+  this.resetPasswordToken = crypto.createHash('sha256').update(resetToken).digest('hex');
   this.resetPasswordExpires = Date.now() + 15 * 60 * 1000; // 15 minutos
-
   return resetToken;
 };
 

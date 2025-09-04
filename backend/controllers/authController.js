@@ -13,8 +13,8 @@ module.exports = {
     try {
       const { username, email, password } = req.body;
       const user = await User.create({ username, email, password });
-      const token = generateToken(user);
-      res.status(201).json({ token });
+      // O token não é enviado na resposta, conforme o novo fluxo
+      res.status(201).json({ message: 'Utilizador criado com sucesso.' });
     } catch (error) {
       // Trata erros, especialmente o caso de e-mail ou nome de utilizador duplicado.
       if (error.name === 'SequelizeUniqueConstraintError') {
@@ -54,24 +54,22 @@ module.exports = {
     try {
       const user = await User.findOne({ where: { email } });
 
-      if (!user) {
-        // Por segurança, respondemos sempre com sucesso para não revelar se um e-mail existe.
-        return res.status(200).json({ message: 'E-mail de recuperação enviado.' });
+      if (user) {
+        const resetToken = user.generatePasswordResetToken();
+        await user.save();
+
+        // Envia o e-mail com o token (não encriptado) para o utilizador.
+        await mailer.sendMail({
+          from: process.env.EMAIL_FROM,
+          to: email,
+          subject: 'Redefinição de Senha',
+          html: `<p>Você solicitou uma redefinição de senha. Use o seguinte token para redefinir sua senha:</p>
+                 <h3>${resetToken}</h3>
+                 <p>Este token é válido por 15 minutos.</p>`,
+        });
       }
 
-      const resetToken = user.generatePasswordResetToken();
-      await user.save();
-
-      // Envia o e-mail com o token (não encriptado) para o utilizador.
-      await mailer.sendMail({
-        from: process.env.EMAIL_FROM,
-        to: email,
-        subject: 'Redefinição de Senha',
-        html: `<p>Você solicitou uma redefinição de senha. Use o seguinte token para redefinir sua senha:</p>
-               <h3>${resetToken}</h3>
-               <p>Este token é válido por 15 minutos.</p>`,
-      });
-
+      // Por segurança, respondemos sempre com sucesso para não revelar se um e-mail existe.
       res.status(200).json({ message: 'E-mail de recuperação enviado.' });
 
     } catch (error) {
