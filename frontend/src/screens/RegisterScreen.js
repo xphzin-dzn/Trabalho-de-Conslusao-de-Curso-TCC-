@@ -29,14 +29,15 @@ const RegisterScreen = ({ navigation }) => {
         }
 
         try {
-            // A chamada à API continua a mesma, mas não precisamos de usar o token retornado aqui.
+            // A chamada à API continua a mesma.
             await api.post('/api/auth/register', { username, email, password });
 
             // Mostra uma mensagem de sucesso e redireciona para a tela de Login
             Alert.alert(
                 'Sucesso',
                 'Conta criada com sucesso! Por favor, faça o login.',
-                [{ text: 'OK', onPress: () => navigation.navigate('Login') }] // ALTERAÇÃO AQUI
+                // --- ALTERAÇÃO PRINCIPAL AQUI ---
+                [{ text: 'OK', onPress: () => navigation.navigate('Login') }]
             );
 
         } catch (error) {
